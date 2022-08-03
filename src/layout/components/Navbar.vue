@@ -7,15 +7,19 @@
     />
 
     <div class="app-breadcrumb">
-      {{$store.state.user.userInfo.companyName}}
+      {{ $store.state.user.userInfo.companyName }}
       <span class="breadBtn">体验版</span>
     </div>
 
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="$store.state.user.userInfo.staffPhoto" class="user-avatar" />
-          <span>{{$store.state.user.userInfo.username}}</span>
+          <img
+            :src="$store.state.user.userInfo.staffPhoto"
+            class="user-avatar"
+            v-imgError="defaultImage"
+          />
+          <span>{{ $store.state.user.userInfo.username }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -35,8 +39,13 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-
+import defaultImage from '../../assets/common/default.jpeg'
 export default {
+  data() {
+    return {
+      defaultImage
+    }
+  },
   components: {
     Breadcrumb,
     Hamburger
