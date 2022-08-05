@@ -3,22 +3,36 @@
     <div class="app-container">
       <!-- 头部 -->
       <el-card class="box-card">
-        <TreeTools :treeNode="company" :isRoot="true"></TreeTools>
+        <TreeTools
+          @add="dialogVisible = true"
+          :treeNode="company"
+          :isRoot="true"
+        ></TreeTools>
         <el-tree :data="treeData" :props="defaultProps" default-expand-all>
           <template v-slot="scope">
-            <TreeTools :treeNode="scope.data"></TreeTools>
+            <TreeTools
+              @add="dialogVisible = true"
+              :treeNode="scope.data"
+              @remove="loadDepts"
+            ></TreeTools>
           </template>
         </el-tree>
       </el-card>
     </div>
+    <AddDept :dialogVisible="dialogVisible"></AddDept>
   </div>
 </template>
 
 <script>
 import { getDeptsAPI } from '@/api'
 import TreeTools from './components/tree-tools.vue'
+import AddDept from './components/add-dept.vue'
 import { transListToTree } from './resolveData'
 export default {
+  components: {
+    TreeTools,
+    AddDept
+  },
   data() {
     return {
       treeData: [
@@ -32,12 +46,9 @@ export default {
       company: {
         name: '传智教育',
         manager: '负责人'
-      }
+      },
+      dialogVisible: false
     }
-  },
-
-  components: {
-    TreeTools
   },
 
   created() {
