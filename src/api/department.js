@@ -18,3 +18,15 @@ export const delDeptsAPI = (id) =>
     url: '/company/department/' + id,
     method: 'DELETE'
   })
+
+  /**
+   * 新增部门
+   * @param {Object} data 新增的部门信息
+   * @returns promise
+   */
+export const AddDeptsAPI = (data) =>
+  request({
+    url: '/company/department/',
+    method: 'POST',
+    data
+  })

@@ -3,15 +3,11 @@
     <div class="app-container">
       <!-- 头部 -->
       <el-card class="box-card">
-        <TreeTools
-          @add="dialogVisible = true"
-          :treeNode="company"
-          :isRoot="true"
-        ></TreeTools>
+        <TreeTools @add="addFn" :treeNode="company" :isRoot="true"></TreeTools>
         <el-tree :data="treeData" :props="defaultProps" default-expand-all>
           <template v-slot="scope">
             <TreeTools
-              @add="dialogVisible = true"
+              @add="addFn"
               :treeNode="scope.data"
               @remove="loadDepts"
             ></TreeTools>
@@ -19,7 +15,10 @@
         </el-tree>
       </el-card>
     </div>
-    <AddDept :dialogVisible="dialogVisible"></AddDept>
+    <AddDept
+      :dialogVisible.sync="dialogVisible"
+      :currentNode="currentNode"
+    ></AddDept>
   </div>
 </template>
 
@@ -47,7 +46,8 @@ export default {
         name: '传智教育',
         manager: '负责人'
       },
-      dialogVisible: false
+      dialogVisible: false,
+      currentNode: {}
     }
   },
 
@@ -61,6 +61,10 @@ export default {
       console.log(res.depts)
 
       this.treeData = transListToTree(res.depts, '')
+    },
+    addFn(val) {
+      this.dialogVisible = true
+      this.currentNode = val
     }
   }
 }
