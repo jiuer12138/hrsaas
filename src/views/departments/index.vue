@@ -2,12 +2,13 @@
   <div class="dashboard-container">
     <div class="app-container">
       <!-- 头部 -->
-      <el-card class="box-card">
+      <el-card class="box-card" v-loading="loading">
         <TreeTools @add="addFn" :treeNode="company" :isRoot="true"></TreeTools>
         <el-tree :data="treeData" :props="defaultProps" default-expand-all>
           <template v-slot="scope">
             <TreeTools
               @add="addFn"
+              @edit="editFn"
               :treeNode="scope.data"
               @remove="loadDepts"
             ></TreeTools>
@@ -16,6 +17,8 @@
       </el-card>
     </div>
     <AddDept
+      ref="addDept"
+      @addSuccess="loadDepts"
       :dialogVisible.sync="dialogVisible"
       :currentNode="currentNode"
     ></AddDept>
@@ -47,7 +50,8 @@ export default {
         manager: '负责人'
       },
       dialogVisible: false,
-      currentNode: {}
+      currentNode: {},
+      loading: false
     }
   },
 
@@ -57,14 +61,18 @@ export default {
 
   methods: {
     async loadDepts() {
+      this.loading = true
       const res = await getDeptsAPI()
-      console.log(res.depts)
-
       this.treeData = transListToTree(res.depts, '')
+      this.loading = false //
     },
     addFn(val) {
       this.dialogVisible = true
       this.currentNode = val
+    },
+    editFn(val) {
+      this.dialogVisible = true
+      this.$refs.addDept.getDeptById(val.id)
     }
   }
 }
