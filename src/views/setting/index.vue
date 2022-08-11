@@ -30,7 +30,29 @@
           >
           </el-pagination>
         </el-tab-pane>
-        <el-tab-pane label="公司信息" name="second">公司信息</el-tab-pane>
+        <el-tab-pane label="公司信息" name="second">
+          <el-alert
+            title="对公司名称、公司地址、营业执照、公司地区的更新，将使得公司资料被重新审核，请谨慎修改"
+            type="info"
+            show-icon
+            :closable="false"
+          >
+          </el-alert>
+          <el-form ref="companyForm" label-width="80px">
+            <el-form-item label="公司名称">
+              <el-input disabled v-model="companyForm.name"></el-input>
+            </el-form-item>
+            <el-form-item label="公司地址">
+              <el-input disabled v-model="companyForm.companyAddress"></el-input>
+            </el-form-item>
+            <el-form-item label="公司邮箱">
+              <el-input disabled v-model="companyForm.mailbox"></el-input>
+            </el-form-item>
+            <el-form-item label="备注">
+              <el-input disabled v-model="companyForm.remarks"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
       </el-tabs>
     </div>
     <!-- 新增dialog -->
@@ -62,7 +84,7 @@
 </template>
 
 <script>
-import { addRolesAPI, getRolesAPI } from '@/api'
+import { addRolesAPI, getRolesAPI, getCompanyInfoAPI } from '@/api'
 export default {
   data() {
     return {
@@ -84,12 +106,14 @@ export default {
             trigger: 'blur'
           }
         ]
-      }
+      },
+      companyForm: {}
     }
   },
 
   created() {
     this.getRoles()
+    this.getCompanyInfo()
   },
 
   methods: {
@@ -98,7 +122,7 @@ export default {
         page: this.page,
         pagesize: this.pagesize
       })
-      console.log(res)
+      // console.log(res)
       this.tableData = res.rows
       this.total = res.total
     },
@@ -121,6 +145,13 @@ export default {
       this.AddDialogVisible = false
       this.$refs.AddRoleForm.resetFields()
       this.AddRoleForm.description = ''
+    },
+    async getCompanyInfo() {
+      const res = await getCompanyInfoAPI(
+        this.$store.state.user.userInfo.companyId
+      )
+      console.log(res)
+      this.companyForm = res
     }
   }
 }
