@@ -9,6 +9,7 @@ import attendancesRouter from './modules/attendances'
 import salarysRouter from './modules/salarys'
 import settingRouter from './modules/setting'
 import socialRouter from './modules/social'
+import importModule from './modules/import'
 Vue.use(Router)
 
 /* Layout */
@@ -46,7 +47,6 @@ export const constantRoutes = [
   { path: '*', redirect: '/404', hidden: true }
 ]
 
-
 // 动态路由
 export const asyncRoutes = [
   approvalsRouter,
@@ -56,7 +56,8 @@ export const asyncRoutes = [
   attendancesRouter,
   salarysRouter,
   settingRouter,
-  socialRouter
+  socialRouter,
+  importModule
 ]
 
 const createRouter = () =>
