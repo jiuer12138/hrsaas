@@ -41,3 +41,15 @@ export function addEmployee(data) {
     data
   })
 }
+
+/**
+ * 批量导入员工
+ * @param {Object} data 要导入的员工信息
+ * @returns promise
+ */
+export const importEmployeesAPI = (data) =>
+  request({
+    url: '/sys/user/batch',
+    method:'POST',
+    data
+  })
