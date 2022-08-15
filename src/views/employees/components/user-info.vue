@@ -58,13 +58,17 @@
         <el-col :span="12">
           <el-form-item label="员工头像">
             <!-- 放置上传图片 -->
+            <UploadImage
+              ref="userImg"
+              @onSuccess="onSuccessHaider"
+            ></UploadImage>
           </el-form-item>
         </el-col>
       </el-row>
       <!-- 保存个人信息 -->
       <el-row class="inline-info" type="flex" justify="center">
         <el-col :span="12">
-          <el-button type="primary">保存更新</el-button>
+          <el-button type="primary" @click="saveUserInfo">保存更新</el-button>
           <el-button @click="$router.back()">返回</el-button>
         </el-col>
       </el-row>
@@ -91,6 +95,10 @@
 
         <el-form-item label="员工照片">
           <!-- 放置上传图片 -->
+          <UploadImage
+            ref="detailImg"
+            @onSuccess="employeesOnsuccess"
+          ></UploadImage>
         </el-form-item>
         <el-form-item label="国家/地区">
           <el-select v-model="formData.nationalArea" class="inputW2">
@@ -376,7 +384,9 @@
         <!-- 保存员工信息 -->
         <el-row class="inline-info" type="flex" justify="center">
           <el-col :span="12">
-            <el-button type="primary">保存更新</el-button>
+            <el-button type="primary" @click="saveUserDetail"
+              >保存更新</el-button
+            >
             <el-button @click="$router.back()">返回</el-button>
           </el-col>
         </el-row>
@@ -466,25 +476,51 @@ export default {
     }
   },
   created() {
+    
     this.loadUserInfo()
     this.loadUserInfoDetail()
-    this.saveUserInfo()
-    this.saveUserDetail()
   },
   methods: {
     async loadUserInfo() {
+      
       this.userInfo = await getUserDetailAPI(this.userId)
+      console.log(this.userInfo)
+      this.$refs.userImg.fileList.push({
+        url: this.userInfo.staffPhoto
+      })
     },
     async loadUserInfoDetail() {
       this.formData = await getPersonalDetail(this.userId)
+      
+      this.$refs.detailImg.fileList.push({
+        url: this.formData.staffPhoto
+      })
     },
     async saveUserInfo() {
-      this.userInfo = await saveUserDetailById(this.userId)
+      
+      if (this.$refs.userImg.loading) {
+        return this.$message.error('头像上传中')
+      }
+      console.log(this.userInfo)
+      
+      this.userInfo = await saveUserDetailById(this.userInfo)
+      
       this.$message.success('更新成功')
     },
     async saveUserDetail() {
-      this.userInfo = await updatePersonal(this.userId)
+      if (this.$refs.detailImg.loading) {
+        return this.$message.error('员工照片上传中')
+      }
+      this.userInfo = await updatePersonal(this.formData)
       this.$message.success('更新成功')
+    },
+    //监听头像上传成功
+    onSuccessHaider({ url }) {
+      this.userInfo.staffPhoto = url
+    },
+    //监听员工照片上传成功
+    employeesOnsuccess({ url }) {
+      this.formData.staffPhoto = url
     }
   }
 }
