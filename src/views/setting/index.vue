@@ -13,7 +13,9 @@
             <el-table-column prop="description" label="描述"> </el-table-column>
             <el-table-column prop="address" label="操作">
               <template>
-                <el-button size="small" type="success">分配权限</el-button>
+                <el-button size="small" type="success" @click="showRightsDialog"
+                  >分配权限</el-button
+                >
                 <el-button size="small" type="primary">编辑</el-button>
                 <el-button size="small" type="danger">删除</el-button>
               </template>
@@ -43,7 +45,10 @@
               <el-input disabled v-model="companyForm.name"></el-input>
             </el-form-item>
             <el-form-item label="公司地址">
-              <el-input disabled v-model="companyForm.companyAddress"></el-input>
+              <el-input
+                disabled
+                v-model="companyForm.companyAddress"
+              ></el-input>
             </el-form-item>
             <el-form-item label="公司邮箱">
               <el-input disabled v-model="companyForm.mailbox"></el-input>
@@ -80,11 +85,38 @@
         <el-button type="primary" @click="onConfirm">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 分配权限dialog -->
+    <el-dialog
+      title="给角色分配权限"
+      :visible.sync="setRightsDialog"
+      width="50%"
+      @close="onCloseRightsDialog"
+    >
+      <el-tree
+        default-expand-all
+        show-checkbox
+        node-key="id"
+        :data="permissionsList"
+        :props="{ label: 'name' }"
+        :default-checked-keys="defaultKeys"
+      ></el-tree>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="onCloseRightsDialog">取 消</el-button>
+        <el-button type="primary">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { addRolesAPI, getRolesAPI, getCompanyInfoAPI } from '@/api'
+import {
+  addRolesAPI,
+  getRolesAPI,
+  getCompanyInfoAPI,
+  getPermissionList
+} from '@/api'
+import { transListToTree } from '@/views/departments/resolveData'
 export default {
   data() {
     return {
@@ -107,13 +139,17 @@ export default {
           }
         ]
       },
-      companyForm: {}
+      companyForm: {},
+      setRightsDialog: false,
+      permissionsList: [],
+      defaultKeys: ['1', '1063315016368918528']
     }
   },
 
   created() {
     this.getRoles()
     this.getCompanyInfo()
+    this.getPermissions()
   },
 
   methods: {
@@ -150,8 +186,20 @@ export default {
       const res = await getCompanyInfoAPI(
         this.$store.state.user.userInfo.companyId
       )
-      console.log(res)
+      // console.log(res)
       this.companyForm = res
+    },
+    onCloseRightsDialog() {
+      this.setRightsDialog = false
+    },
+    showRightsDialog() {
+      this.setRightsDialog = true
+    },
+    async getPermissions() {
+      const res = await getPermissionList()
+      // console.log(res)
+      const permissionsList = transListToTree(res, '0')
+      this.permissionsList = [...permissionsList]
     }
   }
 }
