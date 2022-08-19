@@ -18,12 +18,12 @@ import '@/permission' // permission control
 import * as directives from '@/directive'
 import * as filters from '@/filters'
 import components from '@/components'
-
+import Print from 'vue-print-nb'
 if (process.env.NODE_ENV === 'production') {
   const { mockXHR } = require('../mock')
   mockXHR()
 }
-
+Vue.use(Print)
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明

@@ -1,5 +1,8 @@
 <template>
   <div class="user-info">
+    <router-link :to="`/employees/print/${userId}?type=personal`">
+      <i class="el-icon-printer" />
+    </router-link>
     <!-- 个人信息 -->
     <el-form label-width="220px">
       <!-- 工号 入职时间 -->
@@ -476,13 +479,11 @@ export default {
     }
   },
   created() {
-    
     this.loadUserInfo()
     this.loadUserInfoDetail()
   },
   methods: {
     async loadUserInfo() {
-      
       this.userInfo = await getUserDetailAPI(this.userId)
       console.log(this.userInfo)
       this.$refs.userImg.fileList.push({
@@ -491,20 +492,19 @@ export default {
     },
     async loadUserInfoDetail() {
       this.formData = await getPersonalDetail(this.userId)
-      
+
       this.$refs.detailImg.fileList.push({
         url: this.formData.staffPhoto
       })
     },
     async saveUserInfo() {
-      
       if (this.$refs.userImg.loading) {
         return this.$message.error('头像上传中')
       }
       console.log(this.userInfo)
-      
+
       this.userInfo = await saveUserDetailById(this.userInfo)
-      
+
       this.$message.success('更新成功')
     },
     async saveUserDetail() {

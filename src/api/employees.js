@@ -69,8 +69,18 @@ export function saveUserDetailById(data) {
 /** *
  *  读取用户详情的基础信息
  * **/
- export function getPersonalDetail(id) {
+export function getPersonalDetail(id) {
   return request({
     url: `/employees/${id}/personalInfo`
+  })
+}
+
+/** **
+ * 获取用户的岗位信息
+ *
+ * ****/
+export function getJobDetail(id) {
+  return request({
+    url: `/employees/${id}/jobs`
   })
 }
