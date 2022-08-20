@@ -79,7 +79,7 @@
 
 <script>
 import { transListToTree } from '@/views/departments/resolveData'
-import { getPermissionList } from '@/api'
+import { addPermission, getPermissionList } from '@/api'
 export default {
   data() {
     return {
@@ -120,7 +120,15 @@ export default {
       this.showDialog = false
       this.$refs.perForm.resetFields()
     },
-    btnOK() {},
+    btnOK() {
+      this.$refs.perForm.validate(async (valid) => {
+        if (!valid) return
+        await addPermission(this.formData)
+        this.$message.success('添加权限成功')
+        this.showDialog = false
+        this.getPermission()
+      })
+    },
     showDialogFn(id, type) {
       this.showDialog = true
       this.formData.pid = id
