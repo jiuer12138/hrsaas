@@ -22,3 +22,9 @@ export const addRolesAPI = (data) =>
     method: 'POST',
     data
   })
+// 获取权限详情
+export function getPermissionDetail(id) {
+  return request({
+    url: `/sys/role/${id}`
+  })
+}
