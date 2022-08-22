@@ -1,3 +1,5 @@
+import store from '@/store'
+
 export const imgError = {
   inserted: (el, binding) => {
     if (!el.src) {
@@ -10,6 +12,16 @@ export const imgError = {
   update: (el, binding) => {
     if (!el.src) {
       return (el.src = binding.value)
+    }
+  }
+}
+
+export const isHas = {
+  inserted: (el, binding) => {
+    const has = store.state.permission.points.includes(binding.value)
+
+    if (!has) {
+      el.remove()
     }
   }
 }

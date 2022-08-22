@@ -16,6 +16,7 @@
                 <el-button
                   size="small"
                   type="success"
+                  v-isHas="point.roles.edit"
                   @click="showRightsDialog(row.id)"
                   >分配权限</el-button
                 >
@@ -124,6 +125,7 @@ import {
   assignPerm
 } from '@/api'
 import { transListToTree } from '@/views/departments/resolveData'
+import permissionPoint from '@/constant/permission'
 export default {
   data() {
     return {
@@ -150,7 +152,8 @@ export default {
       setRightsDialog: false,
       permissionsList: [],
       defaultKeys: [],
-      id: ''
+      id: '',
+      point: permissionPoint
     }
   },
 
