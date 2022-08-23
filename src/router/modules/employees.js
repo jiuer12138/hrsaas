@@ -5,9 +5,11 @@ export default {
   meta: {
     id: 'employees', // 用来和后端权限做约定的
   },
+  name: 'employees',
   children: [
     {
       path: '',
+      name: 'employees',
       component: () => import('@/views/employees'),
       meta: { title: '员工', icon: 'people' },
     },

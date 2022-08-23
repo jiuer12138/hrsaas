@@ -5,9 +5,11 @@ export default {
   meta: {
     id: 'permissions', // 用来和后端权限做约定的
   },
+  name: 'permissions',
   children: [
     {
       path: '',
+      name: 'permissions',
       component: () => import('@/views/permission'),
       meta: { title: '权限管理', icon: 'lock' },
     },

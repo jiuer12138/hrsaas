@@ -13,6 +13,7 @@
       <div :class="{ 'fixed-header': fixedHeader }">
         <!-- 头部navbar组件 -->
         <navbar />
+        <TagsView></TagsView>
       </div>
       <!-- 肯定是子路由占位 -->
       <app-main />
